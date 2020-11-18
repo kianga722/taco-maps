@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+        <title>TAC&#10061; MAPS - Nearby Taco Joints!</title>
+
+        <link rel="stylesheet" href="styles/style.css">
+        <link rel="stylesheet" href="styles/leaflet/leaflet.css">
+        <link rel="stylesheet" href="styles/leaflet/leaflet-easybutton.css">
+        <link rel="stylesheet" href="styles/leaflet/leaflet-routing-machine.css" />
+
+        <script src="scripts/leaflet/leaflet.js"></script>
+        <script src="scripts/leaflet/leaflet-easybutton.js"></script>
+        <script src="scripts/leaflet/leaflet-routing-machine.min.js"></script>
+
+    </head>
+
+    <body>
+
+        <div id='loading-wrapper'>
+            <div class='loading'>
+                <picture>
+                    <img src='/img/loading.png' alt='taco loading image'>
+                </picture>
+                <div class='loading-message'>
+                    Searching...
+                </div>
+            </div>
+        </div>
+
+        <div id="error-page">
+            <span class="error-title">
+                Error:
+            </span>
+            <span class='error-message'>
+                Need to accept geolocation to use this app
+            </span>
+        </div>
+
+
+        <div id="content">
+            
+            <header>
+                <div class='dropdown-wrapper'>
+                    <button class='dropdown-trigger'> 
+                        &#9881;
+                    </button>
+                    <ul class='dropdown-menu'>
+                        <li>
+                            <button id='reset'> 
+                                Reset Search
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <div class='title'>
+                    <span>Tac</span><span>&#10061;</span><span>Maps</span> 
+                </div>
+            </header>
+    
+            <div id="map"></div>
+
+            <div id='routing-wrapper'>
+                <div class='routing-title'>
+                    <span>
+                        Routing to:
+                    </span>
+                    <span class='routing-destination'>
+                    </span>
+                </div>
+                <button id='routing-end'>
+                    End Navigation
+                </button>
+            </div>
+        </div>
+        
+        <div class='modal-wrapper hide'>
+            <div id='modal'>
+                <div class='modal-close'>⨯</div>
+                <picture>
+                    <img class='bg-image' alt='preview of restaurant food'>
+                </picture>
+                <div class='modal-content'>
+
+                    <div class='name'></div>
+
+                    <div class='top-info-wrapper'>
+                        <div class='top-info-left'>
+                            <img src=img/yelp/small_0.png alt='0 stars' />
+                            <div class='review-count'></div>
+                            <div class='price'></div>
+                        </div>
+                        <div class='top-info-right'>
+                            <div class='distance'></div>
+                            <div class='tel-wrapper hide'>
+                                <span class='tel-title'>Tel:</span> 
+                                <span class='tel-number'></span>
+                            </div>
+                        </div>
+           
+                        <div class='external-links'>
+                            <a class='link-yelp' href='/' target='_blank' rel='noopener noreferrer'>
+                                <img src='img/yelp/yelp_logo.png' alt='link to Yelp page' />
+                            </a>
+                            <a class='link-menu hide' href='/' target='_blank' rel='noopener noreferrer'>Menu (Zomato)</a>
+                        </div>
+                    </div>
+                    
+                    <div class='bottom-info-wrapper'>
+                        <div class='hours-wrapper'>
+                            <div class='hours-title'>Hours:</div>
+                            <div class='hours-grid'>
+                                <span class='Monday'>Mon</span>
+                                <span class='day-hours'></span>
+
+                                <span class='Tuesday'>Tues</span>
+                                <span class='day-hours'></span>
+
+                                <span class='Wednesday'>Wed</span>
+                                <span class='day-hours'></span>
+
+                                <span class='Thursday'>Thurs</span>
+                                <span class='day-hours'></span>
+
+                                <span class='Friday'>Fri</span>
+                                <span class='day-hours'></span>
+
+                                <span class='Saturday'>Sat</span>
+                                <span class='day-hours'></span>
+
+                                <span class='Sunday'>Sun</span>
+                                <span class='day-hours'></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class='address-wrapper'></div>
+                    <button class='get-directions'>Get Directions</button>
+                </div>
+            </div>
+        </div>
+
+        <div id='copy-success-message' class='hide'>Copied address!</div>
+
+        <template id='template-popup-content'>
+            <div class='popup-info-wrapper'>
+                <div class='bg-image'></div>
+    
+                <div class='top-info-wrapper'>
+                    <div class='name'></div>
+                    <div class='distance' ></div>
+                    <img>
+                    <div class='review-count'></div>
+                    <div class='price'></div>
+                </div>
+    
+                <div class='external-links'>
+                    <a class='link-url' target='_blank' rel='noopener noreferrer'>
+                        <img src='img/yelp/yelp_logo.png'/>
+                    </a>
+                    <div class='loading-menu'>
+                        <div class="lds-dual-ring"></div>
+                    </div>
+                    <a class='link-menu' target='_blank' rel='noopener noreferrer'>Menu (Zomato)</a>
+                </div>
+    
+                <div class='bottom-info-wrapper'>
+                    <div class='hours-wrapper'>
+                        <div class='hours-title'>Hours today:</div> 
+                        <div class='hours-today'></div>
+                    </div>
+                    <div class='tel-wrapper'>
+                        <span class='tel-title'>Tel:</span> 
+                        <span class='tel-number'></span>
+                    </div>
+                </div>
+            </div>
+            <div class='address-wrapper'></div>
+            <button>More Details</button>
+        </template>
+
+        <template id='template-search-again'>
+            <div class='search-again-popup'>
+                <div class='search-again-title'>Search again here?</div>
+                <button>Yes</button>
+            </div>
+        </template>
+        
+        <script src="scripts/script.js"></script>
+    </body>
+
+</html>
