@@ -6,4 +6,4 @@ Displays nearby taco spots using Leaflet, Mapbox, Yelp, and Zomato APIs
 
 ## Summary
 
-- Basic implemntation using a Node server serving plain HTML, CSS, JS
+- Basic implementation using a Node server serving plain HTML, CSS, JS
